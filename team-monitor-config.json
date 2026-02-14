@@ -1,0 +1,27 @@
+{
+  "name": "team-monitor",
+  "version": "1.0.0",
+  "description": "Agent Teams Monitor - Real-time dashboard for monitoring agent teams",
+  "author": "Claude Code",
+  "config": {
+    "server": {
+      "port": 3001,
+      "logPath": "/tmp/team-monitor-backend.log"
+    },
+    "client": {
+      "port": 5173,
+      "logPath": "/tmp/team-monitor-frontend.log"
+    },
+    "watch": {
+      "teamsDir": "~/.claude/teams",
+      "tasksDir": "~/.claude/tasks"
+    }
+  },
+  "commands": {
+    "start": "./team-monitor start",
+    "stop": "./team-monitor stop",
+    "status": "./team-monitor status",
+    "logs": "./team-monitor logs",
+    "restart": "./team-monitor restart"
+  }
+}

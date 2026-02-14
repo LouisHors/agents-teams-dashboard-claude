@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+build/
+*.tgz
+
+# Logs
+*.log
+logs/
+/tmp/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code
+.claude/debug/
+.claude/file-history/
+.claude/shell-snapshots/
+.claude/transcripts/
+.claude/tasks/
+.claude/teams/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Misc
+.cache/
+.parcel-cache/

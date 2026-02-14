@@ -1,0 +1,7 @@
+{
+  "name": "team-monitor",
+  "description": "启动 Agent Teams Monitor 监控面板",
+  "prompt": "启动 Agent Teams Monitor 实时监控系统。\n\n步骤：\n1. 检查服务是否已在运行（端口 3001 和 5173）\n2. 如未运行，启动后端服务 (./team-monitor start)\n3. 如未运行，启动前端服务\n4. 等待服务就绪\n5. 打开浏览器访问 http://localhost:5173\n6. 向用户报告状态\n\n如果服务已在运行，直接打开浏览器并告知用户。",
+  "type": "local",
+  "cwd": "/Users/liuhao/CodeForPerson/agent-teams-dashboard"
+}

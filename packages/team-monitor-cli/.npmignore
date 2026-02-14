@@ -1,0 +1,29 @@
+# Tests
+test/
+tests/
+__tests__/
+*.test.js
+*.spec.js
+
+# CI/CD
+.github/
+.travis.yml
+.gitlab-ci.yml
+azure-pipelines.yml
+
+# Documentation (keep README.md)
+docs/
+PUBLISH.md
+CONTRIBUTING.md
+
+# Development
+.eslintrc
+.prettierrc
+.editorconfig
+
+# Source maps
+*.map
+
+# Misc
+.cache/
+.parcel-cache/
