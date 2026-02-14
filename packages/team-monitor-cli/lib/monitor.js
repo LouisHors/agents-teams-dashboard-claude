@@ -2,8 +2,18 @@ const { spawn, exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const chalk = require('chalk');
 const open = require('open');
+
+// ANSI color codes (compatible with CommonJS)
+const chalk = {
+  blue: (s) => `\x1b[34m${s}\x1b[0m`,
+  green: (s) => `\x1b[32m${s}\x1b[0m`,
+  red: (s) => `\x1b[31m${s}\x1b[0m`,
+  yellow: (s) => `\x1b[33m${s}\x1b[0m`,
+  gray: (s) => `\x1b[90m${s}\x1b[0m`,
+  cyan: (s) => `\x1b[36m${s}\x1b[0m`,
+  bold: (s) => `\x1b[1m${s}\x1b[0m`
+};
 
 class Monitor {
   constructor(options = {}) {
@@ -133,7 +143,7 @@ class Monitor {
   }
 
   async start() {
-    console.log(chalk.blue.bold('\n=== Agent Teams Monitor ===\n'));
+    console.log(chalk.bold(chalk.blue('\n=== Agent Teams Monitor ===\n')));
 
     try {
       // Start backend
@@ -152,7 +162,7 @@ class Monitor {
         this.frontendLog
       );
 
-      console.log('\n' + chalk.green.bold('✓ Monitor is ready!'));
+      console.log('\n' + chalk.bold(chalk.green('✓ Monitor is ready!')));
       console.log(chalk.cyan(`  Dashboard: http://localhost:${this.frontendPort}`));
       console.log(chalk.cyan(`  API:       http://localhost:${this.backendPort}`));
 
@@ -226,7 +236,7 @@ class Monitor {
   }
 
   async status() {
-    console.log(chalk.blue.bold('\n=== Team Monitor Status ===\n'));
+    console.log(chalk.bold(chalk.blue('\n=== Team Monitor Status ===\n')));
 
     const services = [
       { port: this.backendPort, name: 'Backend', url: `http://localhost:${this.backendPort}` },

@@ -1,10 +1,18 @@
 const { execSync } = require('child_process');
-const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
 
+// ANSI color codes (compatible with CommonJS)
+const colors = {
+  blue: (s) => `\x1b[34m${s}\x1b[0m`,
+  green: (s) => `\x1b[32m${s}\x1b[0m`,
+  red: (s) => `\x1b[31m${s}\x1b[0m`,
+  yellow: (s) => `\x1b[33m${s}\x1b[0m`,
+  bold: (s) => `\x1b[1m${s}\x1b[0m`
+};
+
 async function doctor() {
-  console.log(chalk.blue.bold('\n=== Team Monitor Doctor ===\n'));
+  console.log(colors.bold(colors.blue('\n=== Team Monitor Doctor ===\n')));
 
   const checks = [
     { name: 'Node.js', check: checkNode },
@@ -19,9 +27,9 @@ async function doctor() {
   for (const { name, check } of checks) {
     try {
       const result = await check();
-      console.log(`${chalk.green('✓')} ${name.padEnd(15)} ${result}`);
+      console.log(`${colors.green('✓')} ${name.padEnd(15)} ${result}`);
     } catch (error) {
-      console.log(`${chalk.red('✗')} ${name.padEnd(15)} ${error.message}`);
+      console.log(`${colors.red('✗')} ${name.padEnd(15)} ${error.message}`);
       allPassed = false;
     }
   }
@@ -29,9 +37,9 @@ async function doctor() {
   console.log('');
 
   if (allPassed) {
-    console.log(chalk.green.bold('✓ All checks passed! You can use team-monitor.\n'));
+    console.log(colors.bold(colors.green('✓ All checks passed! You can use team-monitor.\n')));
   } else {
-    console.log(chalk.yellow.bold('! Some checks failed. Please fix the issues above.\n'));
+    console.log(colors.bold(colors.yellow('! Some checks failed. Please fix the issues above.\n')));
     process.exit(1);
   }
 }
@@ -61,7 +69,7 @@ function checkClaudeCli() {
     execSync('which claude', { stdio: 'pipe' });
     return 'Installed';
   } catch {
-    return chalk.yellow('Not installed (optional)');
+    return colors.yellow('Not installed (optional)');
   }
 }
 
@@ -79,7 +87,7 @@ async function checkPorts() {
   }
 
   if (inUse.length > 0) {
-    return chalk.yellow(`Ports ${inUse.join(', ')} in use`);
+    return colors.yellow(`Ports ${inUse.join(', ')} in use`);
   }
 
   return 'All available';
