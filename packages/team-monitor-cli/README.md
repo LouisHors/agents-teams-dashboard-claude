@@ -21,8 +21,12 @@ npm install -g team-monitor-cli
 
 This will:
 - Install the `team-monitor` and `tm` commands globally
-- Set up Claude Code skill automatically
-- Make `/team-monitor` available in Claude Code
+- Make dashboard available at http://localhost:5173
+
+For Claude Code skill, copy the skill file manually:
+```bash
+cp -r node_modules/team-monitor-cli/scripts/skill ~/.claude/skills/team-monitor
+```
 
 ### Local Installation
 
@@ -150,8 +154,8 @@ cat /tmp/team-monitor/frontend.log
 ## Development
 
 ```bash
-git clone https://github.com/yourusername/team-monitor-cli.git
-cd team-monitor-cli
+git clone https://github.com/LouisHors/agents-teams-dashboard-claude.git
+cd agent-teams-dashboard/packages/team-monitor-cli
 npm install
 npm link  # For local testing
 ```
@@ -162,9 +166,9 @@ MIT
 
 ## Contributing
 
-Pull requests welcome! Please read CONTRIBUTING.md first.
+Pull requests welcome!
 
 ## Support
 
-- GitHub Issues: https://github.com/yourusername/team-monitor-cli/issues
-- Discussions: https://github.com/yourusername/team-monitor-cli/discussions
+- GitHub Issues: https://github.com/LouisHors/agents-teams-dashboard-claude/issues
+- Discussions: https://github.com/LouisHors/agents-teams-dashboard-claude/discussions
