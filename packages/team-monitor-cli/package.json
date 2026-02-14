@@ -25,12 +25,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/team-monitor-cli.git"
+    "url": "https://github.com/LouisHors/agents-teams-dashboard-claude.git",
+    "directory": "packages/team-monitor-cli"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/team-monitor-cli/issues"
+    "url": "https://github.com/LouisHors/agents-teams-dashboard-claude/issues"
   },
-  "homepage": "https://github.com/yourusername/team-monitor-cli#readme",
+  "homepage": "https://github.com/LouisHors/agents-teams-dashboard-claude#readme",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -38,6 +39,8 @@
     "bin/",
     "lib/",
     "scripts/",
+    "server/",
+    "client/",
     "index.js",
     "README.md",
     "LICENSE"
