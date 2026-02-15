@@ -1,6 +1,6 @@
 {
   "name": "agent-teams-monitor-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Agent Teams 监控系统后端",
   "main": "dist/index.js",
   "scripts": {

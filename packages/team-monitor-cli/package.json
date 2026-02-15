@@ -1,6 +1,6 @@
 {
   "name": "team-monitor-cli",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Agent Teams Monitor - Real-time dashboard for monitoring Claude Code agent teams",
   "main": "index.js",
   "bin": {
