@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Plus } from 'lucide-react';
+import { Search } from 'lucide-react';
 import type { Team } from '../types';
 
 interface TeamListProps {
@@ -81,12 +81,6 @@ export function TeamList({ teams, selectedTeamName, onSelectTeam, loading }: Tea
         )}
       </div>
 
-      <div className="p-3 border-t border-zinc-800">
-        <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg text-sm font-medium transition-colors">
-          <Plus className="w-4 h-4" />
-          New Team
-        </button>
-      </div>
     </>
   );
 }

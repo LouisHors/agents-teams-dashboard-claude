@@ -1,4 +1,4 @@
-import { Settings, Plus, Star } from 'lucide-react';
+import { Settings, Star } from 'lucide-react';
 import type { Member } from '../types';
 
 interface MemberListProps {
@@ -119,12 +119,6 @@ export function MemberList({
         )}
       </div>
 
-      <div className="p-3 border-t border-zinc-800">
-        <button className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-zinc-700 hover:border-zinc-600 text-zinc-400 hover:text-zinc-300 rounded-lg text-sm transition-colors">
-          <Plus className="w-4 h-4" />
-          Add Member
-        </button>
-      </div>
     </>
   );
 }
