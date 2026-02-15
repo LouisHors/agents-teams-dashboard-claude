@@ -8,6 +8,8 @@ import { NetworkGraph } from './components/NetworkGraph';
 import { StatusBar } from './components/StatusBar';
 import { useTeams, useTeamMembers, useMemberMessages, useAllTeamMessages } from './hooks/useTeams';
 import { useSocket } from './hooks/useSocket';
+import { useTasks } from './hooks/useTasks';
+import { TaskBoard } from './components/TaskBoard';
 import type { Message } from './types';
 
 function App() {
@@ -27,7 +29,10 @@ function App() {
   const { allMessages } = useAllTeamMessages(selectedTeamName, members);
 
   // Socket connection
-  const { connected, subscribeToTeam, subscribeToMember } = useSocket();
+  const { socket, connected, subscribeToTeam, subscribeToMember } = useSocket();
+
+  // Tasks
+  const { tasks, isLoading: tasksLoading } = useTasks(socket, selectedTeamName);
 
   // Subscribe to team and member updates via socket
   useEffect(() => {
@@ -155,6 +160,12 @@ function App() {
           teamName={selectedTeamName}
           selectedMemberName={selectedMemberName}
           onNodeClick={handleNodeClick}
+        />
+      }
+      taskPanel={
+        <TaskBoard
+          tasks={tasks}
+          isLoading={tasksLoading}
         />
       }
       statusBar={

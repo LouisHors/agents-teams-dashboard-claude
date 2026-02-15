@@ -60,6 +60,15 @@ io.on('connection', (socket) => {
     socket.join(`member:${data.teamName}:${data.memberName}`);
   });
 
+  // 订阅团队任务
+  socket.on('subscribe:tasks', (teamName) => {
+    console.log(`[Socket] ${socket.id} 订阅任务: ${teamName}`);
+    socket.join(`tasks:${teamName}`);
+    // 发送当前任务列表
+    const tasks = fileWatcher.getTeamTasks(teamName);
+    socket.emit('tasks:initial', { teamName, tasks });
+  });
+
   socket.on('disconnect', () => {
     console.log(`[Socket] 客户端断开: ${socket.id}`);
   });
@@ -77,6 +86,28 @@ fileWatcher.on('message:received', (data) => {
   io.emit('message:received', data);
   io.to(`team:${data.teamName}`).emit('message:received', data);
   io.to(`member:${data.teamName}:${data.memberName}`).emit('message:received', data);
+});
+
+// 任务事件转发到 WebSocket
+fileWatcher.on('task:created', (data) => {
+  console.log(`[Watcher] 新任务: ${data.teamName}/${data.task.id}`);
+  io.emit('task:created', data);
+  io.to(`team:${data.teamName}`).emit('task:created', data);
+  io.to(`tasks:${data.teamName}`).emit('task:created', data);
+});
+
+fileWatcher.on('task:updated', (data) => {
+  console.log(`[Watcher] 任务更新: ${data.teamName}/${data.task.id}`);
+  io.emit('task:updated', data);
+  io.to(`team:${data.teamName}`).emit('task:updated', data);
+  io.to(`tasks:${data.teamName}`).emit('task:updated', data);
+});
+
+fileWatcher.on('task:deleted', (data) => {
+  console.log(`[Watcher] 任务删除: ${data.teamName}/${data.taskId}`);
+  io.emit('task:deleted', data);
+  io.to(`team:${data.teamName}`).emit('task:deleted', data);
+  io.to(`tasks:${data.teamName}`).emit('task:deleted', data);
 });
 
 // 启动服务器

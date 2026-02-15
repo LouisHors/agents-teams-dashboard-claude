@@ -1,20 +1,24 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 
+type PanelTab = 'network' | 'tasks';
+
 interface LayoutProps {
   header: ReactNode;
   sidebar: ReactNode;
   memberList: ReactNode;
   messagePanel: ReactNode;
   networkPanel: ReactNode;
+  taskPanel: ReactNode;
   statusBar: ReactNode;
 }
 
 const MIN_NETWORK_HEIGHT = 50;
 const DEFAULT_NETWORK_HEIGHT = 280;
 
-export function Layout({ header, sidebar, memberList, messagePanel, networkPanel, statusBar }: LayoutProps) {
+export function Layout({ header, sidebar, memberList, messagePanel, networkPanel, taskPanel, statusBar }: LayoutProps) {
   const [networkHeight, setNetworkHeight] = useState(DEFAULT_NETWORK_HEIGHT);
+  const [activeTab, setActiveTab] = useState<PanelTab>('network');
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const startYRef = useRef(0);
@@ -106,12 +110,43 @@ export function Layout({ header, sidebar, memberList, messagePanel, networkPanel
             </div>
           </div>
 
-          {/* Network Graph Panel */}
+          {/* Network Graph / Task Board Panel */}
           <div
-            className="flex-shrink-0 bg-zinc-900 border-t border-zinc-800 relative overflow-hidden"
+            className="flex-shrink-0 bg-zinc-900 border-t border-zinc-800 relative overflow-hidden flex flex-col"
             style={{ height: networkHeight }}
           >
-            {networkPanel}
+            {/* Tab Navigation */}
+            <div className="flex items-center gap-1 px-3 py-2 border-b border-zinc-800 bg-zinc-900">
+              <button
+                onClick={() => setActiveTab('network')}
+                className={`
+                  px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200
+                  ${activeTab === 'network'
+                    ? 'bg-zinc-800 text-cyan-400 border border-zinc-700'
+                    : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'
+                  }
+                `}
+              >
+                网络图
+              </button>
+              <button
+                onClick={() => setActiveTab('tasks')}
+                className={`
+                  px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200
+                  ${activeTab === 'tasks'
+                    ? 'bg-zinc-800 text-cyan-400 border border-zinc-700'
+                    : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'
+                  }
+                `}
+              >
+                任务看板
+              </button>
+            </div>
+
+            {/* Panel Content */}
+            <div className="flex-1 overflow-hidden">
+              {activeTab === 'network' ? networkPanel : taskPanel}
+            </div>
           </div>
         </div>
       </div>

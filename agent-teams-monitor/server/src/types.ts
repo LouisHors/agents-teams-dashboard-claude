@@ -51,16 +51,37 @@ export interface ServerToClientEvents {
   'team:updated': (team: TeamConfig) => void;
   'message:received': (data: { teamName: string; memberName: string; message: Message }) => void;
   'teams:initial': (teams: TeamConfig[]) => void;
+  'task:created': (data: { teamName: string; task: Task }) => void;
+  'task:updated': (data: { teamName: string; task: Task }) => void;
+  'task:deleted': (data: { teamName: string; taskId: string }) => void;
+  'tasks:initial': (data: { teamName: string; tasks: Task[] }) => void;
 }
 
 export interface ClientToServerEvents {
   'subscribe:team': (teamName: string) => void;
   'subscribe:member': (data: { teamName: string; memberName: string }) => void;
+  'subscribe:tasks': (teamName: string) => void;
+}
+
+// 任务状态
+export type TaskStatus = 'pending' | 'in_progress' | 'completed' | 'deleted';
+
+// 任务类型
+export interface Task {
+  id: string;
+  subject: string;
+  description: string;
+  activeForm?: string;
+  status: TaskStatus;
+  owner?: string;
+  blocks: string[];
+  blockedBy: string[];
+  metadata?: Record<string, unknown>;
 }
 
 // 文件变更事件
 export interface FileChangeEvent {
-  type: 'config' | 'inbox';
+  type: 'config' | 'inbox' | 'task';
   teamName: string;
   memberName?: string;
   path: string;

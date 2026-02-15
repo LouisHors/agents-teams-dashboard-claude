@@ -165,29 +165,34 @@ export function NetworkGraph({
     if (!nodes.length) return [];
 
     const edgeMap = new Map<string, NetworkEdge>();
+    // 获取当前团队中所有节点的 ID 集合，用于过滤
+    const nodeIds = new Set(nodes.map((n) => n.id));
 
     // 辅助函数：创建边的唯一 ID（无方向）
     const getEdgeId = (from: string, to: string) => {
-      // 对节点名排序，确保边 ID 一致（A-B 和 B-A 是同一条边）
       const sorted = [from, to].sort();
       return `${sorted[0]}-${sorted[1]}`;
     };
 
     // 1. 从所有团队成员的消息中提取通信关系
-    // 使用 allTeamMessages（所有成员的消息）而不是 messages（当前选中成员的消息）
+    // 只保留当前团队成员之间的连接
     const allMessages = allTeamMessages || new Map<string, Message[]>();
 
     allMessages.forEach((memberMessages, receiverName) => {
+      // 只处理当前团队中的接收者
+      if (!nodeIds.has(receiverName)) return;
+
       memberMessages.forEach((msg) => {
         const sender = msg.from;
-        // 只创建实际存在的通信关系（sender -> receiver）
-        if (sender !== receiverName) {
+        // 只创建当前团队成员之间的通信关系
+        if (sender !== receiverName && nodeIds.has(sender)) {
           const edgeId = getEdgeId(sender, receiverName);
           if (!edgeMap.has(edgeId)) {
+            const sorted = [sender, receiverName].sort();
             edgeMap.set(edgeId, {
               id: edgeId,
-              from: sender,
-              to: receiverName,
+              from: sorted[0],
+              to: sorted[1],
               animated: false,
             });
           }
@@ -204,10 +209,11 @@ export function NetworkGraph({
           .forEach((member) => {
             const edgeId = getEdgeId(lead.id, member.id);
             if (!edgeMap.has(edgeId)) {
+              const sorted = [lead.id, member.id].sort();
               edgeMap.set(edgeId, {
                 id: edgeId,
-                from: lead.id,
-                to: member.id,
+                from: sorted[0],
+                to: sorted[1],
                 animated: false,
               });
             }
@@ -307,8 +313,8 @@ export function NetworkGraph({
             </feMerge>
           </filter>
           <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#3f3f46" />
-            <stop offset="100%" stopColor="#52525b" />
+            <stop offset="0%" stopColor="#52525b" />
+            <stop offset="100%" stopColor="#71717a" />
           </linearGradient>
         </defs>
 
@@ -327,14 +333,24 @@ export function NetworkGraph({
           const curveIntensity = Math.abs(toX - fromX) * 0.1;
 
           return (
-            <path
-              key={edge.id}
-              d={`M ${fromX} ${fromY} Q ${midX} ${midY - curveIntensity - 30} ${toX} ${toY}`}
-              fill="none"
-              stroke="url(#lineGradient)"
-              strokeWidth="2"
-              className="transition-all duration-300"
-            />
+            <g key={edge.id}>
+              {/* 阴影线 - 增加可见性 */}
+              <path
+                d={`M ${fromX} ${fromY} Q ${midX} ${midY - curveIntensity - 30} ${toX} ${toY}`}
+                fill="none"
+                stroke="#27272a"
+                strokeWidth="4"
+                className="transition-all duration-300"
+              />
+              {/* 主连线 */}
+              <path
+                d={`M ${fromX} ${fromY} Q ${midX} ${midY - curveIntensity - 30} ${toX} ${toY}`}
+                fill="none"
+                stroke="url(#lineGradient)"
+                strokeWidth="2"
+                className="transition-all duration-300"
+              />
+            </g>
           );
         })}
 
