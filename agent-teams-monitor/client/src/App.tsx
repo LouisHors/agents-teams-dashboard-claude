@@ -4,8 +4,9 @@ import { Layout } from './components/Layout';
 import { TeamList } from './components/TeamList';
 import { MemberList } from './components/MemberList';
 import { MessagePanel } from './components/MessagePanel';
+import { NetworkGraph } from './components/NetworkGraph';
 import { StatusBar } from './components/StatusBar';
-import { useTeams, useTeamMembers, useMemberMessages } from './hooks/useTeams';
+import { useTeams, useTeamMembers, useMemberMessages, useAllTeamMessages } from './hooks/useTeams';
 import { useSocket } from './hooks/useSocket';
 import type { Message } from './types';
 
@@ -21,6 +22,9 @@ function App() {
     selectedTeamName,
     selectedMemberName
   );
+
+  // Fetch all team messages for network graph
+  const { allMessages } = useAllTeamMessages(selectedTeamName, members);
 
   // Socket connection
   const { connected, subscribeToTeam, subscribeToMember } = useSocket();
@@ -67,6 +71,17 @@ function App() {
     () => members.find((m) => m.name === selectedMemberName) || null,
     [members, selectedMemberName]
   );
+
+  // Get current team config for lead agent id
+  const currentTeam = useMemo(
+    () => teams.find((t) => t.name === selectedTeamName),
+    [teams, selectedTeamName]
+  );
+
+  // Handle node click in network graph
+  const handleNodeClick = useCallback((memberName: string) => {
+    setSelectedMemberName(memberName);
+  }, []);
 
   // Format last update time
   const lastUpdate = useMemo(() => {
@@ -129,6 +144,17 @@ function App() {
           currentUser="you"
           onSendMessage={handleSendMessage}
           loading={messagesLoading}
+        />
+      }
+      networkPanel={
+        <NetworkGraph
+          members={members}
+          leadAgentId={currentTeam?.leadAgentId}
+          messages={messages}
+          allTeamMessages={allMessages}
+          teamName={selectedTeamName}
+          selectedMemberName={selectedMemberName}
+          onNodeClick={handleNodeClick}
         />
       }
       statusBar={

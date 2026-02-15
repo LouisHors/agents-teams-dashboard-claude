@@ -137,3 +137,42 @@ export function useMemberMessages(teamName: string | null, memberName: string | 
 
   return { messages, loading, error, refetch: fetchMessages, addMessage };
 }
+
+// 获取团队所有成员的消息（用于网络图）
+export function useAllTeamMessages(teamName: string | null, members: Member[]) {
+  const [allMessages, setAllMessages] = useState<Map<string, Message[]>>(new Map());
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!teamName || members.length === 0) {
+      setAllMessages(new Map());
+      return;
+    }
+
+    const fetchAllMessages = async () => {
+      setLoading(true);
+      const messagesMap = new Map<string, Message[]>();
+
+      await Promise.all(
+        members.map(async (member) => {
+          try {
+            const response = await fetch(`${API_URL}/teams/${teamName}/messages/${member.name}`);
+            if (response.ok) {
+              const data = await response.json();
+              messagesMap.set(member.name, data);
+            }
+          } catch (err) {
+            console.error(`Failed to fetch messages for ${member.name}:`, err);
+          }
+        })
+      );
+
+      setAllMessages(messagesMap);
+      setLoading(false);
+    };
+
+    fetchAllMessages();
+  }, [teamName, members]);
+
+  return { allMessages, loading };
+}
